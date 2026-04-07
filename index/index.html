@@ -155,6 +155,18 @@
     .theme-toggle:hover {
       background: white;
     }
+    .mom-toggle {
+      background: rgba(255,255,255,0.86);
+      color: var(--text);
+      border: 1px solid #ffe4e6;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+    }
+    .mom-toggle:hover {
+      background: white;
+    }
     .spotify-icon {
       width: 28px;
       height: 28px;
@@ -221,6 +233,33 @@
       color: var(--muted);
       font-size: 0.92rem;
       font-weight: 600;
+      flex-wrap: wrap;
+    }
+    .music-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .music-skip {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: rgba(255,255,255,0.9);
+      color: #111827;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      font-size: 1rem;
+      font-weight: 800;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .music-skip:hover {
+      transform: translateY(-2px) scale(1.03);
+      background: white;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.09);
     }
     .equalizer {
       display: inline-flex;
@@ -246,7 +285,35 @@
       50% { transform: scaleY(1); }
     }
 
+    .hero-visual {
+      position: relative;
+      min-height: 420px;
+    }
     .photo-card { position: relative; }
+    .mom-safe-card {
+      display: none;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid #ffe4e6;
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 30px;
+      height: 100%;
+      min-height: 420px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .mom-safe-card p {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    body.mom-mode .photo-card {
+      display: none;
+    }
+    body.mom-mode .mom-safe-card {
+      display: flex;
+      flex-direction: column;
+    }
 
     .photo-frame {
       background: rgba(255,255,255,0.82);
@@ -628,13 +695,18 @@
           <a class="btn primary" href="#letter">Read my note</a>
           <a class="btn secondary" href="#reasons">Why I adore you</a>
           <button class="btn theme-toggle" id="themeToggle" type="button">🌙 Night mode</button>
-          <button class="btn ghost" id="musicToggle" type="button" aria-label="Play our song">
-            <span class="spotify-icon" aria-hidden="true"><span></span></span>
-            <span class="music-label">
-              <span class="music-state paused" id="musicState"></span>
-              <span id="musicToggleText">Play our song</span>
-            </span>
-          </button>
+          <button class="btn mom-toggle" id="momModeBtn" type="button">Is Your Mom Watching?</button>
+          <div class="music-nav">
+            <button class="music-skip" id="prevTrackBtn" type="button" aria-label="Previous track">⏮</button>
+            <button class="btn ghost" id="musicToggle" type="button" aria-label="Play our song">
+              <span class="spotify-icon" aria-hidden="true"><span></span></span>
+              <span class="music-label">
+                <span class="music-state paused" id="musicState"></span>
+                <span id="musicToggleText">Play our song</span>
+              </span>
+            </button>
+            <button class="music-skip" id="nextTrackBtn" type="button" aria-label="Next track">⏭</button>
+          </div>
           <div class="now-playing" id="nowPlaying">
             <span class="equalizer paused" id="equalizer"><span></span><span></span><span></span><span></span></span>
             <span id="nowPlayingText">Now playing: your song</span>
@@ -657,13 +729,22 @@
         </div>
       </div>
 
-      <div class="photo-card">
-        <div class="photo-frame">
-          <div class="photo-placeholder">
-            <img src="photo1.jpg" alt="Us together" style="width:100%; height:100%; object-fit:cover; border-radius:26px;" />
+      <div class="hero-visual">
+        <div class="photo-card">
+          <div class="photo-frame">
+            <div class="photo-placeholder">
+              <img src="photo1.jpg" alt="Us together" style="width:100%; height:100%; object-fit:cover; border-radius:26px;" />
+            </div>
           </div>
+          <div class="tag">1st kiss?</div>
         </div>
-        <div class="tag">1st kiss?</div>
+        <div class="mom-safe-card" id="momSafeCard">
+          <div class="eyebrow">for mom too</div>
+          <h2 style="margin-bottom:14px;">A sweet note for her mom</h2>
+          <p>Thank you for raising such a kind, beautiful, and genuinely special daughter. She brings so much light into my life, and I will always appreciate the heart, warmth, and goodness she carries with her.</p>
+          <p>I just wanted this version to be something sweet and respectful if she ever wanted to show you this page too.</p>
+          <p class="signature" style="margin-bottom:0;">With love and respect ♡</p>
+        </div>
       </div>
     </section>
 
@@ -760,6 +841,21 @@
     <footer>
       <p>Made with a ridiculous amount of love 💘</p>
     </footer>
+
+    <!-- NEW CUTE SECTION -->
+    <section class="panel" style="text-align:center;">
+      <div class="eyebrow">just for today</div>
+      <h2>Today’s message 💭</h2>
+      <p id="dailyMessage" style="font-weight:600;"></p>
+      <button class="btn primary" id="newMessageBtn" style="margin-top:12px;">give me another one</button>
+    </section>
+
+    <section class="panel" style="text-align:center;">
+      <div class="eyebrow">press this</div>
+      <h2>random cute thing</h2>
+      <button class="btn secondary" id="cuteBtn">tap me</button>
+      <p id="cuteOutput" style="margin-top:16px; font-weight:600;"></p>
+    </section>
   </main>
 
   <audio id="loveSong" loop preload="auto"></audio>
@@ -773,6 +869,7 @@
     const openSiteBtn = document.getElementById('openSiteBtn');
     const typingLine = document.getElementById('typingLine');
     const themeToggle = document.getElementById('themeToggle');
+    const momModeBtn = document.getElementById('momModeBtn');
     const missMeBtn = document.getElementById('missMeBtn');
     const missMessage = document.getElementById('missMessage');
     const hiddenNote = document.getElementById('hiddenNote');
@@ -791,6 +888,11 @@
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('night-mode');
       themeToggle.textContent = document.body.classList.contains('night-mode') ? '☀️ Day mode' : '🌙 Night mode';
+    });
+
+    momModeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('mom-mode');
+      momModeBtn.textContent = document.body.classList.contains('mom-mode') ? 'Back To Normal' : 'Is Your Mom Watching?';
     });
 
     voiceBtn.addEventListener('click', () => {
@@ -825,17 +927,30 @@
     });
 
     const musicToggle = document.getElementById('musicToggle');
+    const prevTrackBtn = document.getElementById('prevTrackBtn');
+    const nextTrackBtn = document.getElementById('nextTrackBtn');
     const musicState = document.getElementById('musicState');
     const musicToggleText = document.getElementById('musicToggleText');
     const loveSong = document.getElementById('loveSong');
     const equalizer = document.getElementById('equalizer');
     const nowPlayingText = document.getElementById('nowPlayingText');
-    const songCandidates = [
-      'My Girl - Anees.mp3',
-      'My-Girl-Anees.mp3',
-      'song.mp3'
+    const playlist = [
+      {
+        title: 'My Girl - Anees',
+        files: ['My Girl - Anees.mp3', 'My-Girl-Anees.mp3', 'song.mp3']
+      },
+      {
+        title: 'Partners In Crime - Set It Off',
+        files: ['Partners In Crime - Set It Off.mp3', 'partners-in-crime.mp3']
+      },
+      {
+        title: 'Song 3',
+        files: ['song3.mp3']
+      }
     ];
+    let currentTrackIndex = 0;
     let activeSongName = 'your song';
+    let requestedAutoplay = false;
     let autoplayBound = false;
 
     function setPausedUI() {
@@ -852,7 +967,7 @@
       musicState.classList.add('playing');
       musicToggleText.textContent = 'Pause our song';
       equalizer.classList.remove('paused');
-      nowPlayingText.textContent = `Now playing: ${activeSongName.replace(/\.mp3$/i, '')}`;
+      nowPlayingText.textContent = `Now playing: ${activeSongName}`;
     }
 
     async function fadeAudio(targetVolume, duration = 600) {
@@ -899,15 +1014,24 @@
       });
     }
 
-    async function ensureSongLoaded() {
-      if (loveSong.src) return true;
-      for (const candidate of songCandidates) {
+    async function loadTrackByIndex(index) {
+      const normalizedIndex = (index + playlist.length) % playlist.length;
+      const track = playlist[normalizedIndex];
+      for (const candidate of track.files) {
         try {
-          activeSongName = await tryLoadSong(candidate);
+          activeSongName = track.title;
+          await tryLoadSong(candidate);
+          currentTrackIndex = normalizedIndex;
+          nowPlayingText.textContent = `Now playing: ${activeSongName}`;
           return true;
         } catch (e) {}
       }
       return false;
+    }
+
+    async function ensureSongLoaded() {
+      if (loveSong.src) return true;
+      return await loadTrackByIndex(currentTrackIndex);
     }
 
     async function startSong() {
@@ -937,14 +1061,54 @@
       await fadeAudio(0, 500);
       loveSong.pause();
       setPausedUI();
-      nowPlayingText.textContent = `Now playing: ${activeSongName.replace(/\.mp3$/i, '')} (paused)`;
+      nowPlayingText.textContent = `Now playing: ${activeSongName} (paused)`;
     }
 
     musicToggle.addEventListener('click', async () => {
+      requestedAutoplay = true;
       if (loveSong.paused) {
         await startSong();
       } else {
         await pauseSong();
+      }
+    });
+
+    prevTrackBtn.addEventListener('click', async () => {
+      requestedAutoplay = true;
+      const wasPlaying = !loveSong.paused;
+      const loaded = await loadTrackByIndex(currentTrackIndex - 1);
+      if (!loaded) {
+        nowPlayingText.textContent = 'Previous track could not be loaded';
+        return;
+      }
+      if (wasPlaying || requestedAutoplay) {
+        await startSong();
+      } else {
+        setPausedUI();
+        nowPlayingText.textContent = `Now playing: ${activeSongName} (ready)`;
+      }
+    });
+
+    nextTrackBtn.addEventListener('click', async () => {
+      requestedAutoplay = true;
+      const wasPlaying = !loveSong.paused;
+      const loaded = await loadTrackByIndex(currentTrackIndex + 1);
+      if (!loaded) {
+        nowPlayingText.textContent = 'Next track could not be loaded';
+        return;
+      }
+      if (wasPlaying || requestedAutoplay) {
+        await startSong();
+      } else {
+        setPausedUI();
+        nowPlayingText.textContent = `Now playing: ${activeSongName} (ready)`;
+      }
+    });
+
+    loveSong.addEventListener('ended', async () => {
+      const loaded = await loadTrackByIndex(currentTrackIndex + 1);
+      if (loaded) {
+        await startSong();
       }
     });
 
@@ -1022,6 +1186,75 @@
     updateCurrentDate();
     setInterval(updateLoveCounter, 1000);
     setInterval(updateCurrentDate, 60000);
+
+    // NEW CUTE FEATURES
+    const messages = [
+      "you’re my favorite person ever",
+      "i still get butterflies when i think about you",
+      "you make everything feel lighter",
+      "i’d choose you in every lifetime",
+      "you’re literally my peace",
+      "you’re so pretty it’s unfair",
+      "you are my heart, my life, my one and only thought",
+      "you are my greatest adventure",
+      "my favorite place in the world is next to you",
+      "you are all of my today and all of my tomorrows",
+      "i would find you in any lifetime",
+      "you’re nothing short of my everything",
+      "you make me feel like i’m home",
+      "every day with you is my favorite day",
+      "i look at you and everything makes sense",
+      "you’re my safe place",
+      "you’re the reason my days feel better",
+      "you’re my favorite feeling",
+      "i love you more than words can ever explain",
+      "you are the best thing that ever happened to me"
+    ];
+
+    const cuteThings = [
+      "i miss your face",
+      "come here so i can hug you",
+      "you owe me a kiss",
+      "you’re stuck with me btw",
+      "i’m thinking about you right now",
+      "you’re my favorite notification",
+      "i fell for you slowly, then all at once",
+      "i’d rather be with you than anywhere else",
+      "you make everything better",
+      "you’re my peace in chaos",
+      "you’re my comfort person",
+      "i smile like an idiot when i think about you",
+      "you’re literally my favorite human",
+      "i still can’t believe you’re mine",
+      "you make my heart do dumb things",
+      "i want you. always.",
+      "you’re my person",
+      "you’re my happy place",
+      "i’d pick you every single time",
+      "i love you more every day"
+    ];
+
+    const dailyMessage = document.getElementById('dailyMessage');
+    const newMessageBtn = document.getElementById('newMessageBtn');
+    const cuteBtn = document.getElementById('cuteBtn');
+    const cuteOutput = document.getElementById('cuteOutput');
+
+    function setDailyMessage() {
+      const todayIndex = new Date().getDate() % messages.length;
+      dailyMessage.textContent = messages[todayIndex];
+    }
+
+    newMessageBtn.addEventListener('click', () => {
+      const random = messages[Math.floor(Math.random() * messages.length)];
+      dailyMessage.textContent = random;
+    });
+
+    cuteBtn.addEventListener('click', () => {
+      const random = cuteThings[Math.floor(Math.random() * cuteThings.length)];
+      cuteOutput.textContent = random;
+    });
+
+    setDailyMessage();
   </script>
 </body>
 </html>
